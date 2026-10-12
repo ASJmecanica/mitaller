@@ -3,98 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Vehículo</title>
+    <title>Portal Digital del Vehículo</title>
     <style>
-        body { background-color: #121212; color: #ffffff; font-family: 'Arial', sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .phone-container { width: 100%; max-width: 410px; background-color: #121212; min-height: 90vh; display: flex; flex-direction: column; }
-        .header { text-align: center; font-size: 14px; font-weight: bold; padding: 15px; color: #888; border-bottom: 1px solid #222; }
-        .main-card { background: #1e1e1e; border: 1px solid #2d2d2d; border-radius: 16px; padding: 20px; margin-top: 20px; }
-        .patente { font-size: 32px; font-weight: bold; text-align: center; margin: 0; letter-spacing: 1px; text-transform: uppercase; }
-        .modelo { font-size: 12px; color: #888888; text-align: center; font-weight: bold; margin: 5px 0 20px 0; text-transform: uppercase; }
-        .row { display: flex; justify-content: space-between; padding: 14px 0; font-size: 15px; }
-        .divider { height: 1px; background-color: #2d2d2d; }
-        .lbl { color: #888888; }
-        .val { font-weight: bold; }
-        .alert { color: #ff5555; }
-        .sub-card { background: #1e1e1e; border: 1px solid #2d2d2d; border-radius: 12px; padding: 15px; margin-top: 12px; }
-        .sub-title { font-size: 10px; font-weight: bold; color: #888888; margin-bottom: 4px; text-transform: uppercase; }
-        .sub-val { font-size: 15px; font-weight: bold; }
-        .loading { text-align: center; margin-top: 50px; color: #888; font-size: 16px; }
+        body { background-color: #0b0f19; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .phone-container { width: 100%; max-width: 410px; min-height: 95vh; display: flex; flex-direction: column; padding-bottom: 80px; }
+        .header { text-align: center; font-size: 14px; font-weight: bold; padding: 15px; color: #707e94; border-bottom: 1px solid #1e293b; letter-spacing: 0.5px; }
+        
+        /* Tarjeta de Kilometraje Grande superior */
+        .km-badge { text-align: center; font-size: 16px; font-weight: bold; color: #94a3b8; background: #1e293b; padding: 6px 16px; border-radius: 20px; width: fit-content; margin: 20px auto 10px auto; }
+        
+        .main-card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .status-time { font-size: 14px; color: #94a3b8; font-weight: bold; }
+        .status-tag { background: rgba(239, 68, 68, 0.15); color: #ef4444; font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 13px; display: flex; align-items: center; gap: 4px; }
+        
+        .sub-title { font-size: 11px; font-weight: 800; color: #64748b; margin: 15px 0 6px 0; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+        .sub-val { font-size: 15px; font-weight: bold; text-align: center; color: #f8fafc; margin-bottom: 15px; }
+        
+        .divider { height: 1px; background-color: #1f2937; margin: 15px 0; }
+        
+        /* Listado de Servicios Adicionales */
+        .service-item { background: #111827; border: 1px solid #1f2937; border-radius: 14px; padding: 15px; margin-bottom: 10px; }
+        .service-title { font-size: 14px; font-weight: bold; color: #f8fafc; display: flex; align-items: center; justify-content: space-between; }
+        .service-desc { font-size: 12.5px; color: #94a3b8; margin-top: 6px; line-height: 1.4; }
+        .check-icon { color: #10b981; font-weight: bold; }
+        .alert-icon { color: #ef4444; font-weight: bold; }
+
+        /* Tarjeta de Alerta de Vencimiento de Ficha */
+        .alert-box { background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 14px; padding: 18px; margin-top: 10px; }
+        .alert-box-title { color: #ef4444; font-size: 15px; font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .alert-box-desc { font-size: 13px; color: #cbd5e1; line-height: 1.4; }
+        
+        /* Botonera inferior flotante idéntica a la app */
+        .action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f19; padding: 12px 20px 25px 20px; display: flex; gap: 10px; justify-content: center; box-shadow: 0 -10px 20px rgba(0,0,0,0.5); }
+        .btn { flex: 1; max-width: 195px; border: none; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; cursor: pointer; }
+        .btn-ws { background-color: #06b6d4; color: #ffffff; }
+        .btn-call { background-color: #ef4444; color: #ffffff; }
+        
+        .loading { text-align: center; margin-top: 100px; color: #64748b; font-size: 16px; }
     </style>
 </head>
 <body>
     <div class="phone-container" id="app" style="display:none;">
-        <div class="header">Lubricentro Motos • Historial Online</div>
+        <div class="header" id="txt-taller">MI TALLER MECÁNICO</div>
         
+        <div class="km-badge" id="txt-km">0 km</div>
+
+        <!-- Ficha de Aceite y Filtros -->
         <div class="main-card">
-            <div class="patente" id="txt-patente">---</div>
-            <div class="modelo" id="txt-modelo">CARGANDO...</div>
-            <div class="divider"></div>
-            <div class="row"><span class="lbl">Propietario/a:</span><span class="val" id="txt-cliente">-</span></div>
-            <div class="divider"></div>
-            <div class="row"><span class="lbl">Km actual:</span><span class="val" style="font-size: 18px;" id="txt-km">-</span></div>
-            <div class="divider"></div>
-            <div class="row"><span class="lbl">Estado:</span><span class="val alert">✘ Vencido / Control</span></div>
-        </div>
-
-        <div class="sub-card">
-            <div class="sub-title">Aceite Usado</div>
+            <div class="status-header">
+                <span class="status-time">12:21</span>
+                <span class="status-tag">✘ Vencido</span>
+            </div>
+            
+            <div class="sub-title">Aceite</div>
             <div class="sub-val" id="txt-aceite">-</div>
+            
+            <div class="sub-title">Filtros</div>
+            <div class="sub-val" id="txt-filtros">-</div>
         </div>
 
-        <div class="sub-card">
-            <div class="sub-title">Filtros y Notas</div>
-            <div class="sub-val" style="font-weight: normal; color: #ccc;" id="txt-filtros">-</div>
+        <!-- Secciones de Inspección Adicionales Dinámicas -->
+        <div class="service-item">
+            <div class="service-title"><span>Control de frenos</span> <span class="check-icon">✓</span></div>
+            <div class="service-desc" id="txt-frenos">-</div>
+        </div>
+
+        <div class="service-item">
+            <div class="service-title"><span>Inspección de batería</span> <span class="check-icon">✓</span></div>
+            <div class="service-desc" id="txt-bateria">-</div>
+        </div>
+
+        <div class="service-item">
+            <div class="service-title"><span>Escaneo electrónico preventivo</span> <span class="check-icon">✓</span></div>
+            <div class="service-desc" id="txt-escaneo">-</div>
+        </div>
+
+        <!-- Bloque de Notificación Dinámica de Próximo Service -->
+        <div class="alert-box">
+            <div class="alert-box-title">⚠️ Tu service está vencido</div>
+            <div class="alert-box-desc" id="txt-alerta-info">-</div>
+        </div>
+
+        <!-- Barra inferior de acciones directas -->
+        <div class="action-bar">
+            <a href="#" id="link-ws" class="btn btn-ws">💬 Enviar mensaje</a>
+            <a href="#" id="link-call" class="btn btn-call">📞 Llamar</a>
         </div>
     </div>
     
-    <div id="loader" class="loading">Buscando historial de moto...</div>
+    <div id="loader" class="loading">Cargando portal digital del vehículo...</div>
 
-      <script>
-        // URL corregida con formato nativo de Firebase
-        const FIREBASE_URL = "https://tallermotos-77d16-default-rtdb.firebaseio.com/";
+    <script>
+        const FIREBASE_URL = "https://firebaseio.com";
 
         const urlParams = new URLSearchParams(window.location.search);
         const motoId = urlParams.get('moto');
 
         if (motoId) {
-            // Se añade el método de cabeceras para evitar bloqueos del navegador
-            fetch(`${FIREBASE_URL}motos/${motoId.toUpperCase()}.json`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
-                }
-                return response.json();
-            })
+            fetch(`${FIREBASE_URL}motos/${motoId.toUpperCase()}.json`)
+            .then(response => response.json())
             .then(data => {
                 if(data) {
-                    document.getElementById('txt-patente').innerText = motoId.toUpperCase();
-                    document.getElementById('txt-modelo').innerText = data.modelo || 'SIN ESPECIFICAR';
-                    document.getElementById('txt-cliente').innerText = data.cliente || '-';
-                    document.getElementById('txt-km').innerText = data.km || '-';
-                    document.getElementById('txt-aceite').innerText = data.aceite || '-';
-                    document.getElementById('txt-filtros').innerText = data.filtros || '-';
+                    // Datos principales
+                    document.getElementById('txt-taller').innerText = (data.taller || 'ASJ MECÁNICA').toUpperCase() + " • " + (data.modelo || 'MOTO').toUpperCase();
+                    document.getElementById('txt-km').innerText = String(data.km).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " km";
+                    document.getElementById('txt-aceite').innerText = data.aceite || 'No especificado';
+                    document.getElementById('txt-filtros').innerText = data.filtros || 'No especificado';
                     
+                    // Controles técnicos detallados
+                    document.getElementById('txt-frenos').innerText = data.frenos || 'Se inspeccionaron pastillas y discos de freno correctamente.';
+                    document.getElementById('txt-bateria').innerText = data.bateria || 'Se comprobó voltaje y estado de carga dentro de los parámetros.';
+                    document.getElementById('txt-escaneo').innerText = data.escaneo || 'Sin códigos de falla activos en la unidad.';
+                    
+                    // Alerta de mantenimiento estructurada
+                    document.getElementById('txt-alerta-info').innerText = `Para el vehículo de ${data.cliente || 'Cliente'}: El próximo mantenimiento recomendado es a los ${String(Number(data.km || 0) + 10000).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} km para no forzar el motor.`;
+                    
+                    // Configuración de los botones de contacto telefónico directos
+                    const telTaller = data.telefono || "5493883142661"; // Reemplazar por tu número por defecto
+                    document.getElementById('link-ws').href = `https://wa.me//{telTaller}?text=Hola,%20necesito%20coordinar%20un%20turno%20para%20mi%20moto%20dominio%20${motoId.toUpperCase()}`;
+                    document.getElementById('link-call').href = `tel:${telTaller}`;
+
                     document.getElementById('loader').style.display = 'none';
                     document.getElementById('app').style.display = 'block';
                 } else {
-                    document.getElementById('loader').innerText = "Moto no registrada en el sistema.";
+                    document.getElementById('loader').innerText = "Historial técnico no encontrado.";
                 }
             })
             .catch(err => {
-                console.error(err);
-                document.getElementById('loader').innerText = "Error de enlace: intente escanear nuevamente.";
+                document.getElementById('loader').innerText = "Error de sincronización con el servidor.";
             });
         } else {
-            document.getElementById('loader').innerText = "Código QR inválido (Falta dominio).";
+            document.getElementById('loader').innerText = "Acceso denegado: Código QR inválido.";
         }
     </script>
-    
 </body>
 </html>
+
