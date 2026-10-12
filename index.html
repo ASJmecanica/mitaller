@@ -50,38 +50,51 @@
     
     <div id="loader" class="loading">Buscando historial de moto...</div>
 
-    <script>
-        // Tu URL de Firebase extraída de tu propia captura
-        const FIREBASE_URL = "https://firebaseio.com";
+      <script>
+        // URL corregida con formato nativo de Firebase
+        const FIREBASE_URL = "https://tallermotos-77d16-default-rtdb.firebaseio.com/";
 
-        // Leer la patente que viene del código QR (?moto=VALOR)
         const urlParams = new URLSearchParams(window.location.search);
         const motoId = urlParams.get('moto');
 
         if (motoId) {
-            fetch(`${FIREBASE_URL}motos/${motoId.toUpperCase()}.json`)
-                .then(response => response.json())
-                .then(data => {
-                    if(data) {
-                        document.getElementById('txt-patente').innerText = motoId.toUpperCase();
-                        document.getElementById('txt-modelo').innerText = data.modelo || 'SIN ESPECIFICAR';
-                        document.getElementById('txt-cliente').innerText = data.cliente || '-';
-                        document.getElementById('txt-km').innerText = data.km || '-';
-                        document.getElementById('txt-aceite').innerText = data.aceite || '-';
-                        document.getElementById('txt-filtros').innerText = data.filtros || '-';
-                        
-                        document.getElementById('loader').style.display = 'none';
-                        document.getElementById('app').style.display = 'block';
-                    } else {
-                        document.getElementById('loader').innerText = "Moto no registrada o sin historial.";
-                    }
-                })
-                .catch(err => {
-                    document.getElementById('loader').innerText = "Error al conectar con el taller.";
-                });
+            // Se añade el método de cabeceras para evitar bloqueos del navegador
+            fetch(`${FIREBASE_URL}motos/${motoId.toUpperCase()}.json`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(data) {
+                    document.getElementById('txt-patente').innerText = motoId.toUpperCase();
+                    document.getElementById('txt-modelo').innerText = data.modelo || 'SIN ESPECIFICAR';
+                    document.getElementById('txt-cliente').innerText = data.cliente || '-';
+                    document.getElementById('txt-km').innerText = data.km || '-';
+                    document.getElementById('txt-aceite').innerText = data.aceite || '-';
+                    document.getElementById('txt-filtros').innerText = data.filtros || '-';
+                    
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('app').style.display = 'block';
+                } else {
+                    document.getElementById('loader').innerText = "Moto no registrada en el sistema.";
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('loader').innerText = "Error de enlace: intente escanear nuevamente.";
+            });
         } else {
             document.getElementById('loader').innerText = "Código QR inválido (Falta dominio).";
         }
     </script>
+    
 </body>
 </html>
