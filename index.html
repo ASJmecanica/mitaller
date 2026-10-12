@@ -1,0 +1,82 @@
+import tkinter as tk
+from tkinter import messagebox, filedialog
+import requests
+import qrcode
+import os
+
+class TallerMotosNube:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Panel Taller - Subir a la Nube")
+        self.root.geometry("450x600")
+        self.root.configure(bg="#121212")
+        
+        # ⚠️ REEMPLAZÁ ESTA URL CON LA DE TU REALTIME DATABASE DE FIREBASE
+        self.firebase_url = "https://tallermotos-77d16-default-rtdb.firebaseio.com/" 
+        
+        # URL de tu página web (Paso 3) donde el cliente verá los datos
+        self.web_cliente_url = "https://github.io"
+
+        self.crear_interfaz()
+
+    def crear_interfaz(self):
+        tk.Label(self.root, text="REGISTRO DE SERVICIO (NUBE)", font=("Arial", 14, "bold"), fg="#ffffff", bg="#121212").pack(pady=15)
+        
+        form = tk.Frame(self.root, bg="#1e1e1e", bd=1, relief="flat")
+        form.pack(fill="both", expand=True, padx=20, pady=10)
+
+        self.patente = self.crear_campo(form, "Patente (Ej: ABC123):")
+        self.modelo = self.crear_campo(form, "Moto / Modelo:")
+        self.cliente = self.crear_campo(form, "Nombre Cliente:")
+        self.km = self.crear_campo(form, "Kilometraje:")
+        self.aceite = self.crear_campo(form, "Aceite colocado:")
+        self.filtros = self.crear_campo(form, "Filtros / Notas adicionales:")
+
+        btn_subir = tk.Button(self.root, text="🚀 SUBIR DATOS Y GENERAR QR", font=("Arial", 12, "bold"), fg="#ffffff", bg="#ff3333", activebackground="#cc2222", bd=0, height=2, command=self.subir_y_generar)
+        btn_subir.pack(fill="x", padx=20, pady=20)
+
+    def crear_campo(self, parent, text):
+        tk.Label(parent, text=text, font=("Arial", 9, "bold"), fg="#888888", bg="#1e1e1e").pack(anchor="w", padx=15, pady=(8, 2))
+        entry = tk.Entry(parent, font=("Arial", 11), bg="#2d2d2d", fg="#ffffff", bd=0, insertbackground="white")
+        entry.pack(fill="x", padx=15, ipady=4)
+        return entry
+
+    def subir_y_generar(self):
+        patente_id = self.patente.get().strip().upper()
+        if not patente_id:
+            messagebox.showerror("Error", "La patente es obligatoria para indexar el vehículo.")
+            return
+
+        # Estructura de datos que va a la nube
+        payload = {
+            "modelo": self.modelo.get().upper(),
+            "cliente": self.cliente.get(),
+            "km": self.km.get(),
+            "aceite": self.aceite.get(),
+            "filtros": self.filtros.get()
+        }
+
+        try:
+            # Subir a Firebase mediante su API REST nativa (.json)
+            url_nodo = f"{self.firebase_url}motos/{patente_id}.json"
+            response = requests.put(url_nodo, json=payload)
+
+            if response.status_code == 200:
+                # Generar el enlace dinámico para el cliente
+                enlace_cliente = f"{self.web_cliente_url}?moto={patente_id}"
+                
+                # Crear código QR
+                qr = qrcode.make(enlace_cliente)
+                nombre_qr = f"QR_{patente_id}.png"
+                qr.save(nombre_qr)
+                
+                messagebox.showinfo("Éxito", f"Datos subidos a la nube.\nQR guardado como: {nombre_qr}\n\nEnlace: {enlace_cliente}")
+            else:
+                messagebox.showerror("Error", "No se pudo sincronizar con Firebase.")
+        except Exception as e:
+            messagebox.showerror("Error de red", f"No se pudo conectar: {str(e)}")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = TallerMotosNube(root)
+    root.mainloop()
