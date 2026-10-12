@@ -3,138 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Digital del Vehículo</title>
+    <title>Portal Digital del Vehículo - ASJ Mecánica</title>
     <style>
-        body { background-color: #0b0f19; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 15px; display: flex; justify-content: center; }
-        .phone-container { width: 100%; max-width: 410px; min-height: 95vh; display: flex; flex-direction: column; padding-bottom: 80px; }
-        .header { text-align: center; font-size: 14px; font-weight: bold; padding: 15px; color: #707e94; border-bottom: 1px solid #1e293b; letter-spacing: 0.5px; }
+        body { background-color: #06090e; color: #f0f6fc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; }
+        .phone-container { width: 100%; max-width: 412px; background-color: #06090e; min-height: 100vh; position: relative; padding-bottom: 110px; box-sizing: border-box; }
         
-        /* Tarjeta de Kilometraje Grande superior */
-        .km-badge { text-align: center; font-size: 16px; font-weight: bold; color: #94a3b8; background: #1e293b; padding: 6px 16px; border-radius: 20px; width: fit-content; margin: 20px auto 10px auto; }
+        /* Foto Principal Cabecera */
+        .header-moto { width: 100%; height: 230px; object-fit: cover; border-bottom: 2px solid #21262d; background-color: #161b22; }
         
-        .main-card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 20px; margin-bottom: 12px; }
-        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .status-time { font-size: 14px; color: #94a3b8; font-weight: bold; }
-        .status-tag { background: rgba(239, 68, 68, 0.15); color: #ef4444; font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 13px; display: flex; align-items: center; gap: 4px; }
-        
-        .sub-title { font-size: 11px; font-weight: 800; color: #64748b; margin: 15px 0 6px 0; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
-        .sub-val { font-size: 15px; font-weight: bold; text-align: center; color: #f8fafc; margin-bottom: 15px; }
-        
-        .divider { height: 1px; background-color: #1f2937; margin: 15px 0; }
-        
-        /* Listado de Servicios Adicionales */
-        .service-item { background: #111827; border: 1px solid #1f2937; border-radius: 14px; padding: 15px; margin-bottom: 10px; }
-        .service-title { font-size: 14px; font-weight: bold; color: #f8fafc; display: flex; align-items: center; justify-content: space-between; }
-        .service-desc { font-size: 12.5px; color: #94a3b8; margin-top: 6px; line-height: 1.4; }
-        .check-icon { color: #10b981; font-weight: bold; }
-        .alert-icon { color: #ef4444; font-weight: bold; }
+        .content { padding: 16px; }
+        .patente-header { font-size: 28px; font-weight: 800; text-align: center; margin: 0 auto 5px auto; letter-spacing: 1px; color: #ffffff; text-transform: uppercase; }
+        .modelo-header { font-size: 13px; color: #8b949e; text-align: center; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
 
-        /* Tarjeta de Alerta de Vencimiento de Ficha */
-        .alert-box { background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 14px; padding: 18px; margin-top: 10px; }
-        .alert-box-title { color: #ef4444; font-size: 15px; font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-        .alert-box-desc { font-size: 13px; color: #cbd5e1; line-height: 1.4; }
+        /* Semáforo Alerta de Mantenimiento Inteligente */
+        .alert-panel { border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid transparent; }
+        .alert-red { background-color: rgba(255, 69, 58, 0.08); border-color: rgba(255, 69, 58, 0.2); color: #ff453a; }
+        .alert-yellow { background-color: rgba(255, 214, 10, 0.08); border-color: rgba(255, 214, 10, 0.2); color: #ffd60a; }
+        .alert-green { background-color: rgba(48, 213, 200, 0.08); border-color: rgba(48, 213, 200, 0.2); color: #30d5c8; }
+        .alert-title { font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
         
-        /* Botonera inferior flotante idéntica a la app */
-        .action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f19; padding: 12px 20px 25px 20px; display: flex; gap: 10px; justify-content: center; box-shadow: 0 -10px 20px rgba(0,0,0,0.5); }
-        .btn { flex: 1; max-width: 195px; border: none; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; cursor: pointer; }
-        .btn-ws { background-color: #06b6d4; color: #ffffff; }
-        .btn-call { background-color: #ef4444; color: #ffffff; }
+        /* Tarjetas de Datos Clave */
+        .info-card { background-color: #161b22; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #21262d; cursor: pointer; transition: 0.2s; }
+        .info-card:active { background-color: #1f242c; }
+        .card-meta { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #8b949e; font-weight: bold; text-transform: uppercase; }
+        .card-main-val { font-size: 16px; font-weight: 600; color: #ffffff; margin-top: 6px; }
         
-        .loading { text-align: center; margin-top: 100px; color: #64748b; font-size: 16px; }
+        /* Desplegable interactivo */
+        .expand-content { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #21262d; font-size: 13.5px; color: #c9d1d9; line-height: 1.5; word-wrap: break-word; }
+        
+        /* Control interactivo deslizable (Slider Antes/Después) */
+        .evidence-box { background-color: #161b22; border-radius: 12px; padding: 16px; border: 1px solid #21262d; margin-top: 15px; }
+        .slider-container { position: relative; width: 100%; height: 220px; border-radius: 8px; overflow: hidden; margin-top: 10px; background-color: #0d1117; }
+        .slider-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+        .img-after { width: 100%; height: 100%; z-index: 1; }
+        .img-before { width: 100%; height: 100%; z-index: 2; clip-path: inset(0 50% 0 0); }
+        .slider-input { position: absolute; -webkit-appearance: none; appearance: none; width: 100%; height: 100%; background: transparent; outline: none; margin: 0; z-index: 3; cursor: ew-resize; top: 0; left: 0; }
+        
+        /* Botonera Fija Inferior */
+        .footer-nav { position: fixed; bottom: 0; width: 100%; max-width: 412px; background-color: #06090e; padding: 12px 16px 25px 16px; display: flex; gap: 12px; box-sizing: border-box; border-top: 1px solid #21262d; z-index: 10; }
+        .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: none; text-align: center; }
+        .btn-cyan { background-color: #00e5ff; color: #000000; }
+        .btn-call { background-color: #7a0010; color: #ffffff; }
+        
+        .loader { text-align: center; margin-top: 150px; color: #8b949e; font-size: 16px; }
     </style>
 </head>
 <body>
-    <div class="phone-container" id="app" style="display:none;">
-        <div class="header" id="txt-taller">MI TALLER MECÁNICO</div>
+    <div class="phone-container" id="portal-view" style="display:none;">
+        <img id="img-moto-principal" src="" class="header-moto" alt="Moto Cliente">
         
-        <div class="km-badge" id="txt-km">0 km</div>
+        <div class="content">
+            <h1 class="patente-header" id="lbl-patente">---</h1>
+            <div class="modelo-header" id="lbl-modelo">---</div>
 
-        <!-- Ficha de Aceite y Filtros -->
-        <div class="main-card">
-            <div class="status-header">
-                <span class="status-time">12:21</span>
-                <span class="status-tag">✘ Vencido</span>
+            <!-- Panel de Alerta Inteligente Automático -->
+            <div id="panel-semaforo" class="alert-panel alert-green">
+                <div class="alert-title" id="lbl-semaforo-titulo">⚠️ Analizando Historial</div>
+                <div id="lbl-semaforo-desc">Validando fechas de service...</div>
             </div>
-            
-            <div class="sub-title">Aceite</div>
-            <div class="sub-val" id="txt-aceite">-</div>
-            
-            <div class="sub-title">Filtros</div>
-            <div class="sub-val" id="txt-filtros">-</div>
+
+            <!-- Módulos de Información Interactivos -->
+            <div class="info-card" onclick="toggleCard('det-aceite')">
+                <div class="card-meta">🛢️ Aceite Utilizado</div>
+                <div class="card-main-val" id="lbl-aceite">-</div>
+                <div id="det-aceite" class="expand-content">Especificación técnica del lubricante colocada de acuerdo a las exigencias térmicas exigidas por el motor.</div>
+            </div>
+
+            <div class="info-card" onclick="toggleCard('det-filtros')">
+                <div class="card-meta">⚙️ Filtros Instalados</div>
+                <div class="card-main-val" id="lbl-filtros">-</div>
+                <div id="det-filtros" class="expand-content">Elementos filtrantes nuevos instalados. Sellos de estanqueidad lubricados y torqueados según manual de taller.</div>
+            </div>
+
+            <div class="info-card" onclick="toggleCard('det-adicionales')">
+                <div class="card-meta">🛠️ Trabajos Realizados e Inspección</div>
+                <div class="card-main-val">Ver informe técnico del mecánico ✓</div>
+                <div id="det-adicionales" class="expand-content" id="lbl-detalles-texto">
+                    Cargando observaciones técnicas...
+                </div>
+            </div>
+
+            <!-- Slider Interactivo de Evidencia Fotográfica (Antes / Después) -->
+            <div class="evidence-box" id="box-evidencia" style="display:none;">
+                <div class="card-meta">📸 Control de Calidad (Deslizar para comparar)</div>
+                <div class="slider-container">
+                    <img id="foto-despues" class="slider-img img-after" src="">
+                    <img id="foto-antes" class="slider-img img-before" src="">
+                    <input type="range" min="0" max="100" value="50" class="slider-input" oninput="moveSlider(this)">
+                </div>
+            </div>
         </div>
 
-        <!-- Secciones de Inspección Adicionales Dinámicas -->
-        <div class="service-item">
-            <div class="service-title"><span>Control de frenos</span> <span class="check-icon">✓</span></div>
-            <div class="service-desc" id="txt-frenos">-</div>
-        </div>
-
-        <div class="service-item">
-            <div class="service-title"><span>Inspección de batería</span> <span class="check-icon">✓</span></div>
-            <div class="service-desc" id="txt-bateria">-</div>
-        </div>
-
-        <div class="service-item">
-            <div class="service-title"><span>Escaneo electrónico preventivo</span> <span class="check-icon">✓</span></div>
-            <div class="service-desc" id="txt-escaneo">-</div>
-        </div>
-
-        <!-- Bloque de Notificación Dinámica de Próximo Service -->
-        <div class="alert-box">
-            <div class="alert-box-title">⚠️ Tu service está vencido</div>
-            <div class="alert-box-desc" id="txt-alerta-info">-</div>
-        </div>
-
-        <!-- Barra inferior de acciones directas -->
-        <div class="action-bar">
-            <a href="#" id="link-ws" class="btn btn-ws">💬 Enviar mensaje</a>
-            <a href="#" id="link-call" class="btn btn-call">📞 Llamar</a>
+        <div class="footer-nav">
+            <a href="https://wa.me" id="btn-ws" class="btn-action btn-cyan">💬 Enviar mensaje</a>
+            <a href="tel:5493883142661" class="btn-action btn-call">📞 Llamar al Taller</a>
         </div>
     </div>
-    
-    <div id="loader" class="loading">Cargando portal digital del vehículo...</div>
 
+    <div id="global-loader" class="loader">Conectando de forma segura al taller ASJ...</div>
     <script>
-        const FIREBASE_URL = "https://tallermotos-77d16-default-rtdb.firebaseio.com/";
+        const FIREBASE_DB = "https://firebaseio.com";
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const motoId = urlParams.get('moto');
+        const params = new URLSearchParams(window.location.search);
+        const motoId = params.get('moto');
+
+        function toggleCard(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function moveSlider(slider) {
+            const beforeImg = document.getElementById('foto-antes');
+            beforeImg.style.clipPath = `inset(0 ${100 - slider.value}% 0 0)`;
+        }
 
         if (motoId) {
-            fetch(`${FIREBASE_URL}motos/${motoId.toUpperCase()}.json`)
-            .then(response => response.json())
+            fetch(`${FIREBASE_DB}motos/${motoId.toUpperCase()}.json`)
+            .then(res => res.json())
             .then(data => {
-                if(data) {
-                    // Datos principales
-                    document.getElementById('txt-taller').innerText = (data.taller || 'ASJ MECÁNICA').toUpperCase() + " • " + (data.modelo || 'MOTO').toUpperCase();
-                    document.getElementById('txt-km').innerText = String(data.km).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " km";
-                    document.getElementById('txt-aceite').innerText = data.aceite || 'No especificado';
-                    document.getElementById('txt-filtros').innerText = data.filtros || 'No especificado';
+                if (data) {
+                    document.getElementById('lbl-patente').innerText = motoId.toUpperCase();
+                    document.getElementById('lbl-modelo').innerText = data.modelo || 'MOTO NO ESPECIFICADA';
+                    document.getElementById('lbl-aceite').innerText = data.aceite || 'No cargado';
+                    document.getElementById('lbl-filtros').innerText = data.filtros || 'No cargado';
+                    document.getElementById('img-moto-principal').src = data.foto_moto || "https://unsplash.com";
                     
-                    // Controles técnicos detallados
-                    document.getElementById('txt-frenos').innerText = data.frenos || 'Se inspeccionaron pastillas y discos de freno correctamente.';
-                    document.getElementById('txt-bateria').innerText = data.bateria || 'Se comprobó voltaje y estado de carga dentro de los parámetros.';
-                    document.getElementById('txt-escaneo').innerText = data.escaneo || 'Sin códigos de falla activos en la unidad.';
-                    
-                    // Alerta de mantenimiento estructurada
-                    document.getElementById('txt-alerta-info').innerText = `Para el vehículo de ${data.cliente || 'Cliente'}: El próximo mantenimiento recomendado es a los ${String(Number(data.km || 0) + 10000).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} km para no forzar el motor.`;
-                    
-                    // Configuración de los botones de contacto telefónico directos
-                    const telTaller = data.telefono || "5493883142661"; // Reemplazar por tu número por defecto
-                    document.getElementById('link-ws').href = `https://wa.me//{telTaller}?text=Hola,%20necesito%20coordinar%20un%20turno%20para%20mi%20moto%20dominio%20${motoId.toUpperCase()}`;
-                    document.getElementById('link-call').href = `tel:${telTaller}`;
+                    document.getElementById('lbl-detalles-texto').innerText = data.detalles || 'Mantenimiento preventivo general ejecutado de forma conforme.';
 
-                    document.getElementById('loader').style.display = 'none';
-                    document.getElementById('app').style.display = 'block';
+                    if (data.foto_antes && data.foto_despues && data.foto_antes !== "" && data.foto_despues !== "") {
+                        document.getElementById('foto-antes').src = data.foto_antes;
+                        document.getElementById('foto-despues').src = data.foto_despues;
+                        document.getElementById('box-evidencia').style.display = 'block';
+                    } else {
+                        document.getElementById('box-evidencia').style.display = 'none';
+                    }
+
+                    const formatKm = (num) => String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    const panel = document.getElementById('panel-semaforo');
+                    const pTitulo = document.getElementById('lbl-semaforo-titulo');
+                    const pDesc = document.getElementById('lbl-semaforo-desc');
+
+                    if (data.proximo_fecha) {
+                        const fechaLimite = new Date(data.proximo_fecha + "T00:00:00");
+                        const hoy = new Date();
+                        hoy.setHours(0,0,0,0);
+                        
+                        const diasRestantes = Math.ceil((fechaLimite - hoy) / (1000 * 60 * 60 * 24));
+                        const kmFaltantes = data.proximo_km ? formatKm(data.proximo_km) : "---";
+
+                        if (diasRestantes < 0) {
+                            panel.className = "alert-panel alert-red";
+                            pTitulo.innerText = "🔒 Tu service está vencido";
+                            pDesc.innerText = `La fecha límite recomendada era el ${data.proximo_fecha} o a los ${kmFaltantes} km. Tu motor corre riesgo mecánico. Solicitá un turno abajo.`;
+                        } else if (diasRestantes <= 7) {
+                            panel.className = "alert-panel alert-yellow";
+                            pTitulo.innerText = "⚠️ Mantenimiento próximo a vencer";
+                            pDesc.innerText = `Te quedan ${diasRestantes} días recomendados (Vence el ${data.proximo_fecha}). Agendá tu visita técnica para evitar averías.`;
+                        } else {
+                            panel.className = "alert-panel alert-green";
+                            pTitulo.innerText = "✓ Estado del Service: Al día";
+                            pDesc.innerText = `Mantenimiento seguro. Próxima revisión estipulada para el ${data.proximo_fecha} o al alcanzar los ${kmFaltantes} km.`;
+                        }
+                    } else {
+                        panel.className = "alert-panel alert-green";
+                        pTitulo.innerText = "✓ Control Técnico Registrado";
+                        pDesc.innerText = `Ficha técnica guardada correctamente en el historial digital de ASJ Mecánica.`;
+                    }
+
+                    document.getElementById('btn-ws').href = `https://wa.me{motoId.toUpperCase()}`;
+                    document.getElementById('global-loader').style.display = 'none';
+                    document.getElementById('portal-view').style.display = 'block';
                 } else {
-                    document.getElementById('loader').innerText = "Historial técnico no encontrado.";
+                    document.getElementById('global-loader').innerText = "Vehículo no registrado o dominio incorrecto.";
                 }
             })
             .catch(err => {
-                document.getElementById('loader').innerText = "Error de sincronización con el servidor.";
+                document.getElementById('global-loader').innerText = "Error crítico de conexión de base de datos.";
             });
         } else {
-            document.getElementById('loader').innerText = "Acceso denegado: Código QR inválido.";
+            document.getElementById('global-loader').innerText = "Acceso denegado: Escaneo QR sin datos de patente.";
         }
     </script>
 </body>
