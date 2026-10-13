@@ -101,7 +101,8 @@
     </div>
 
     <div id="global-loader" class="loader">Conectando de forma segura al taller ASJ...</div>
-    <script>
+   <script>
+        // 🌐 URL Real y oficial de tu consola Firebase corregida con barras de seguridad
         const FIREBASE_DB = "https://firebaseio.com";
 
         const params = new URLSearchParams(window.location.search);
@@ -118,8 +119,12 @@
         }
 
         if (motoId) {
+            // Consulta directa y limpia forzando el formato JSON sin bloqueos
             fetch(`${FIREBASE_DB}motos/${motoId.toUpperCase()}.json`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) { throw new Error('Error de red'); }
+                return res.json();
+            })
             .then(data => {
                 if (data) {
                     document.getElementById('lbl-patente').innerText = motoId.toUpperCase();
@@ -128,8 +133,9 @@
                     document.getElementById('lbl-filtros').innerText = data.filtros || 'No cargado';
                     document.getElementById('img-moto-principal').src = data.foto_moto || "https://unsplash.com";
                     
-                    document.getElementById('lbl-detalles-texto').innerText = data.detalles || 'Mantenimiento preventivo general ejecutado de forma conforme.';
+                    document.getElementById('lbl-detalles-texto').innerText = data.detalles || 'Mantenimiento preventivo general de moto ejecutado de forma conforme.';
 
+                    // Mostrar el deslizador solo si hay fotos cargadas en la base de datos
                     if (data.foto_antes && data.foto_despues && data.foto_antes !== "" && data.foto_despues !== "") {
                         document.getElementById('foto-antes').src = data.foto_antes;
                         document.getElementById('foto-despues').src = data.foto_despues;
@@ -170,7 +176,9 @@
                         pDesc.innerText = `Ficha técnica guardada correctamente en el historial digital de ASJ Mecánica.`;
                     }
 
+                    // Enlace corregido apuntando a tu WhatsApp con texto automático para el cliente
                     document.getElementById('btn-ws').href = `https://wa.me{motoId.toUpperCase()}`;
+                    
                     document.getElementById('global-loader').style.display = 'none';
                     document.getElementById('portal-view').style.display = 'block';
                 } else {
@@ -186,4 +194,3 @@
     </script>
 </body>
 </html>
-
