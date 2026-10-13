@@ -74,6 +74,7 @@
     </div>
     <div id="global-loader" class="loader">Conectando de forma segura al taller ASJ...</div>
     <script>
+        // Dirección oficial de tu base de datos de Firebase
         const FIREBASE_DB = "https://firebaseio.com";
         const params = new URLSearchParams(window.location.search);
         const motoId = params.get('moto');
@@ -89,6 +90,7 @@
         }
 
         if (motoId) {
+            // Consulta directa forzada con extensión nativa .json para evitar trabas de red
             fetch(`${FIREBASE_DB}motos/${motoId.toUpperCase()}.json`)
             .then(res => res.json())
             .then(data => {
@@ -97,7 +99,7 @@
                     document.getElementById('lbl-modelo').innerText = data.modelo || 'MOTO';
                     document.getElementById('lbl-aceite').innerText = data.aceite || 'No cargado';
                     document.getElementById('lbl-filtros').innerText = data.filtros || 'No cargado';
-                    document.getElementById('lbl-detalles-texto').innerText = data.detalles || 'Mantenimiento preventivo general ejecutado de forma conforme.';
+                    document.getElementById('lbl-detalles-texto').innerText = data.detalles || 'Mantenimiento preventivo general de moto ejecutado de forma conforme.';
 
                     if (data.foto_moto && data.foto_moto.startsWith('http')) {
                         const imgPrincipal = document.getElementById('img-moto-principal');
@@ -126,7 +128,7 @@
                         if (diasRestantes < 0) {
                             panel.className = "alert-panel alert-red";
                             pTitulo.innerText = "🔒 Tu service está vencido";
-                            pDesc.innerText = `La fecha límite recomendada era el ${data.proximo_fecha} o a los ${kmFaltantes} km.`;
+                            pDesc.innerText = `La fecha límite recomendada era el ${data.proximo_fecha} o al alcanzar los ${kmFaltantes} km.`;
                         } else if (diasRestantes <= 7) {
                             panel.className = "alert-panel alert-yellow";
                             pTitulo.innerText = "⚠️ Mantenimiento próximo a vencer";
@@ -134,7 +136,7 @@
                         } else {
                             panel.className = "alert-panel alert-green";
                             pTitulo.innerText = "✓ Estado del Service: Al día";
-                            pDesc.innerText = `Próxima revisión estipulada para el ${data.proximo_fecha} o al alcanzar los ${kmFaltantes} km.`;
+                            pDesc.innerText = `Revisión técnica en orden. Próximo service estipulado para el ${data.proximo_fecha} o a los ${kmFaltantes} km.`;
                         }
                     } else {
                         panel.className = "alert-panel alert-green";
@@ -158,4 +160,5 @@
     </script>
 </body>
 </html>
+
 
