@@ -7,84 +7,58 @@
     <style>
         body { background-color: #06090e; color: #f0f6fc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; }
         .phone-container { width: 100%; max-width: 412px; background-color: #06090e; min-height: 100vh; position: relative; padding-bottom: 110px; box-sizing: border-box; }
-        
-        /* Foto Principal Cabecera */
-        .header-moto { width: 100%; height: 230px; object-fit: cover; border-bottom: 2px solid #21262d; background-color: #161b22; }
-        
+        .header-moto { width: 100%; height: 230px; object-fit: cover; border-bottom: 2px solid #21262d; background-color: #161b22; display: none; }
         .content { padding: 16px; }
         .patente-header { font-size: 28px; font-weight: 800; text-align: center; margin: 0 auto 5px auto; letter-spacing: 1px; color: #ffffff; text-transform: uppercase; }
         .modelo-header { font-size: 13px; color: #8b949e; text-align: center; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
-
-        /* Semáforo Alerta de Mantenimiento Inteligente */
         .alert-panel { border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid transparent; }
         .alert-red { background-color: rgba(255, 69, 58, 0.08); border-color: rgba(255, 69, 58, 0.2); color: #ff453a; }
         .alert-yellow { background-color: rgba(255, 214, 10, 0.08); border-color: rgba(255, 214, 10, 0.2); color: #ffd60a; }
         .alert-green { background-color: rgba(48, 213, 200, 0.08); border-color: rgba(48, 213, 200, 0.2); color: #30d5c8; }
         .alert-title { font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-        
-        /* Tarjetas de Datos Clave */
-        .info-card { background-color: #161b22; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #21262d; cursor: pointer; transition: 0.2s; }
-        .info-card:active { background-color: #1f242c; }
+        .info-card { background-color: #161b22; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #21262d; cursor: pointer; }
         .card-meta { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #8b949e; font-weight: bold; text-transform: uppercase; }
         .card-main-val { font-size: 16px; font-weight: 600; color: #ffffff; margin-top: 6px; }
-        
-        /* Desplegable interactivo */
         .expand-content { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #21262d; font-size: 13.5px; color: #c9d1d9; line-height: 1.5; word-wrap: break-word; }
-        
-        /* Control interactivo deslizable (Slider Antes/Después) */
-        .evidence-box { background-color: #161b22; border-radius: 12px; padding: 16px; border: 1px solid #21262d; margin-top: 15px; }
+        .evidence-box { background-color: #161b22; border-radius: 12px; padding: 16px; border: 1px solid #21262d; margin-top: 15px; display: none; }
         .slider-container { position: relative; width: 100%; height: 220px; border-radius: 8px; overflow: hidden; margin-top: 10px; background-color: #0d1117; }
         .slider-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
         .img-after { width: 100%; height: 100%; z-index: 1; }
         .img-before { width: 100%; height: 100%; z-index: 2; clip-path: inset(0 50% 0 0); }
         .slider-input { position: absolute; -webkit-appearance: none; appearance: none; width: 100%; height: 100%; background: transparent; outline: none; margin: 0; z-index: 3; cursor: ew-resize; top: 0; left: 0; }
-        
-        /* Botonera Fija Inferior */
         .footer-nav { position: fixed; bottom: 0; width: 100%; max-width: 412px; background-color: #06090e; padding: 12px 16px 25px 16px; display: flex; gap: 12px; box-sizing: border-box; border-top: 1px solid #21262d; z-index: 10; }
         .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: none; text-align: center; }
         .btn-cyan { background-color: #00e5ff; color: #000000; }
         .btn-call { background-color: #7a0010; color: #ffffff; }
-        
         .loader { text-align: center; margin-top: 150px; color: #8b949e; font-size: 16px; }
     </style>
 </head>
 <body>
     <div class="phone-container" id="portal-view" style="display:none;">
         <img id="img-moto-principal" src="" class="header-moto" alt="Moto Cliente">
-        
         <div class="content">
             <h1 class="patente-header" id="lbl-patente">---</h1>
             <div class="modelo-header" id="lbl-modelo">---</div>
-
-            <!-- Panel de Alerta Inteligente Automático -->
             <div id="panel-semaforo" class="alert-panel alert-green">
                 <div class="alert-title" id="lbl-semaforo-titulo">⚠️ Analizando Historial</div>
                 <div id="lbl-semaforo-desc">Validando fechas de service...</div>
             </div>
-
-            <!-- Módulos de Información Interactivos -->
             <div class="info-card" onclick="toggleCard('det-aceite')">
                 <div class="card-meta">🛢️ Aceite Utilizado</div>
                 <div class="card-main-val" id="lbl-aceite">-</div>
-                <div id="det-aceite" class="expand-content">Especificación técnica del lubricante colocada de acuerdo a las exigencias térmicas exigidas por el motor.</div>
+                <div id="det-aceite" class="expand-content">Lubricante colocado de acuerdo a las exigencias térmicas exigidas por el motor.</div>
             </div>
-
             <div class="info-card" onclick="toggleCard('det-filtros')">
                 <div class="card-meta">⚙️ Filtros Instalados</div>
                 <div class="card-main-val" id="lbl-filtros">-</div>
-                <div id="det-filtros" class="expand-content">Elementos filtrantes nuevos instalados. Sellos de estanqueidad lubricados y torqueados según manual de taller.</div>
+                <div id="det-filtros" class="expand-content">Elementos filtrantes nuevos instalados. Sellos de estanqueidad lubricados y torqueados según manual.</div>
             </div>
-
             <div class="info-card" onclick="toggleCard('det-adicionales')">
                 <div class="card-meta">🛠️ Trabajos Realizados e Inspección</div>
                 <div class="card-main-val">Ver informe técnico del mecánico ✓</div>
-                <div id="det-adicionales" class="expand-content" id="lbl-detalles-texto">
-                    Cargando observaciones técnicas...
-                </div>
+                <div id="det-adicionales" class="expand-content" id="lbl-detalles-texto">Cargando observaciones técnicas...</div>
             </div>
-
-            <!-- Slider Interactivo de Evidencia Fotográfica (Antes / Después) -->
-            <div class="evidence-box" id="box-evidencia" style="display:none;">
+            <div class="evidence-box" id="box-evidencia">
                 <div class="card-meta">📸 Control de Calidad (Deslizar para comparar)</div>
                 <div class="slider-container">
                     <img id="foto-despues" class="slider-img img-after" src="">
@@ -93,18 +67,14 @@
                 </div>
             </div>
         </div>
-
         <div class="footer-nav">
             <a href="https://wa.me" id="btn-ws" class="btn-action btn-cyan">💬 Enviar mensaje</a>
             <a href="tel:5493883142661" class="btn-action btn-call">📞 Llamar al Taller</a>
         </div>
     </div>
-
     <div id="global-loader" class="loader">Conectando de forma segura al taller ASJ...</div>
-      <script>
-        // 🌐 URL Base forzada con el protocolo REST directo de Google
+    <script>
         const FIREBASE_DB = "https://firebaseio.com";
-
         const params = new URLSearchParams(window.location.search);
         const motoId = params.get('moto');
 
@@ -119,37 +89,26 @@
         }
 
         if (motoId) {
-            // Formateo estricto del nodo .json con cabeceras de omisión de bloqueo CORS
-            fetch(`${FIREBASE_DB}motos/${motoId.toUpperCase()}.json`, {
-                method: 'GET',
-                mode: 'cors',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => {
-                if (!res.ok) { throw new Error('Rebote de servidor'); }
-                return res.json();
-            })
+            fetch(`${FIREBASE_DB}motos/${motoId.toUpperCase()}.json`)
+            .then(res => res.json())
             .then(data => {
                 if (data) {
-                    // Inyección de textos primarios
                     document.getElementById('lbl-patente').innerText = motoId.toUpperCase();
-                    document.getElementById('lbl-modelo').innerText = data.modelo || 'MOTO NO ESPECIFICADA';
+                    document.getElementById('lbl-modelo').innerText = data.modelo || 'MOTO';
                     document.getElementById('lbl-aceite').innerText = data.aceite || 'No cargado';
                     document.getElementById('lbl-filtros').innerText = data.filtros || 'No cargado';
-                    document.getElementById('img-moto-principal').src = data.foto_moto || "https://unsplash.com";
-                    
-                    document.getElementById('lbl-detalles-texto').innerText = data.detalles || 'Mantenimiento preventivo general de moto ejecutado de forma conforme.';
+                    document.getElementById('lbl-detalles-texto').innerText = data.detalles || 'Mantenimiento preventivo general ejecutado de forma conforme.';
 
-                    // Control de visibilidad del visualizador Antes/Después
-                    if (data.foto_antes && data.foto_despues && data.foto_antes !== "" && data.foto_despues !== "") {
+                    if (data.foto_moto && data.foto_moto.startsWith('http')) {
+                        const imgPrincipal = document.getElementById('img-moto-principal');
+                        imgPrincipal.src = data.foto_moto;
+                        imgPrincipal.style.display = 'block';
+                    }
+
+                    if (data.foto_antes && data.foto_despues && data.foto_antes.startsWith('http') && data.foto_despues.startsWith('http')) {
                         document.getElementById('foto-antes').src = data.foto_antes;
                         document.getElementById('foto-despues').src = data.foto_despues;
                         document.getElementById('box-evidencia').style.display = 'block';
-                    } else {
-                        document.getElementById('box-evidencia').style.display = 'none';
                     }
 
                     const formatKm = (num) => String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -161,22 +120,21 @@
                         const fechaLimite = new Date(data.proximo_fecha + "T00:00:00");
                         const hoy = new Date();
                         hoy.setHours(0,0,0,0);
-                        
                         const diasRestantes = Math.ceil((fechaLimite - hoy) / (1000 * 60 * 60 * 24));
                         const kmFaltantes = data.proximo_km ? formatKm(data.proximo_km) : "---";
 
                         if (diasRestantes < 0) {
                             panel.className = "alert-panel alert-red";
                             pTitulo.innerText = "🔒 Tu service está vencido";
-                            pDesc.innerText = `La fecha límite recomendada era el ${data.proximo_fecha} o a los ${kmFaltantes} km. Tu motor corre riesgo mecánico. Solicitá un turno abajo.`;
+                            pDesc.innerText = `La fecha límite recomendada era el ${data.proximo_fecha} o a los ${kmFaltantes} km.`;
                         } else if (diasRestantes <= 7) {
                             panel.className = "alert-panel alert-yellow";
                             pTitulo.innerText = "⚠️ Mantenimiento próximo a vencer";
-                            pDesc.innerText = `Te quedan ${diasRestantes} días recomendados (Vence el ${data.proximo_fecha}). Agendá tu visita técnica para evitar averías.`;
+                            pDesc.innerText = `Te quedan ${diasRestantes} días recomendados (Vence el ${data.proximo_fecha}).`;
                         } else {
                             panel.className = "alert-panel alert-green";
                             pTitulo.innerText = "✓ Estado del Service: Al día";
-                            pDesc.innerText = `Mantenimiento seguro. Próxima revisión estipulada para el ${data.proximo_fecha} o al alcanzar los ${kmFaltantes} km.`;
+                            pDesc.innerText = `Próxima revisión estipulada para el ${data.proximo_fecha} o al alcanzar los ${kmFaltantes} km.`;
                         }
                     } else {
                         panel.className = "alert-panel alert-green";
@@ -184,9 +142,7 @@
                         pDesc.innerText = `Ficha técnica guardada correctamente en el historial digital de ASJ Mecánica.`;
                     }
 
-                    // Enlace directo a tu WhatsApp comercial verificado
                     document.getElementById('btn-ws').href = `https://wa.me{motoId.toUpperCase()}`;
-                    
                     document.getElementById('global-loader').style.display = 'none';
                     document.getElementById('portal-view').style.display = 'block';
                 } else {
@@ -194,7 +150,6 @@
                 }
             })
             .catch(err => {
-                console.error(err);
                 document.getElementById('global-loader').innerText = "Error crítico de conexión de base de datos.";
             });
         } else {
@@ -203,3 +158,4 @@
     </script>
 </body>
 </html>
+
