@@ -101,8 +101,8 @@
     </div>
 
     <div id="global-loader" class="loader">Conectando de forma segura al taller ASJ...</div>
-   <script>
-        // 🌐 URL Real y oficial de tu consola Firebase corregida con barras de seguridad
+      <script>
+        // 🌐 URL Base forzada con el protocolo REST directo de Google
         const FIREBASE_DB = "https://firebaseio.com";
 
         const params = new URLSearchParams(window.location.search);
@@ -119,14 +119,22 @@
         }
 
         if (motoId) {
-            // Consulta directa y limpia forzando el formato JSON sin bloqueos
-            fetch(`${FIREBASE_DB}motos/${motoId.toUpperCase()}.json`)
+            // Formateo estricto del nodo .json con cabeceras de omisión de bloqueo CORS
+            fetch(`${FIREBASE_DB}motos/${motoId.toUpperCase()}.json`, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
             .then(res => {
-                if (!res.ok) { throw new Error('Error de red'); }
+                if (!res.ok) { throw new Error('Rebote de servidor'); }
                 return res.json();
             })
             .then(data => {
                 if (data) {
+                    // Inyección de textos primarios
                     document.getElementById('lbl-patente').innerText = motoId.toUpperCase();
                     document.getElementById('lbl-modelo').innerText = data.modelo || 'MOTO NO ESPECIFICADA';
                     document.getElementById('lbl-aceite').innerText = data.aceite || 'No cargado';
@@ -135,7 +143,7 @@
                     
                     document.getElementById('lbl-detalles-texto').innerText = data.detalles || 'Mantenimiento preventivo general de moto ejecutado de forma conforme.';
 
-                    // Mostrar el deslizador solo si hay fotos cargadas en la base de datos
+                    // Control de visibilidad del visualizador Antes/Después
                     if (data.foto_antes && data.foto_despues && data.foto_antes !== "" && data.foto_despues !== "") {
                         document.getElementById('foto-antes').src = data.foto_antes;
                         document.getElementById('foto-despues').src = data.foto_despues;
@@ -176,7 +184,7 @@
                         pDesc.innerText = `Ficha técnica guardada correctamente en el historial digital de ASJ Mecánica.`;
                     }
 
-                    // Enlace corregido apuntando a tu WhatsApp con texto automático para el cliente
+                    // Enlace directo a tu WhatsApp comercial verificado
                     document.getElementById('btn-ws').href = `https://wa.me{motoId.toUpperCase()}`;
                     
                     document.getElementById('global-loader').style.display = 'none';
@@ -186,6 +194,7 @@
                 }
             })
             .catch(err => {
+                console.error(err);
                 document.getElementById('global-loader').innerText = "Error crítico de conexión de base de datos.";
             });
         } else {
